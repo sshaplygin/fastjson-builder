@@ -8,27 +8,29 @@ import (
 )
 
 func main() {
-	pool := &fastjson.ArenaPool{}
-	// user := &User{}
-	var user *User
+	user := &User{ID: "test_value", Tags: []string{"1", "3", "2"}}
+	// var user User
 	data, err := json.Marshal(&user)
 	if err != nil {
 		panic(err)
 	}
 
-	log.Println("std marshal", string(data))
+	log.Println("std json marshal", string(data))
 
+	pool := &fastjson.ArenaPool{}
 	arena := pool.Get()
 
 	val := GetUserVal(arena, user)
-	log.Println("manual val", val.String())
+	log.Println("manual build val", val.String())
 
 	// Don't forget reset arena after String()
 	arena.Reset()
 
-	gUser := &GenerateUser{}
-	new_val := MakeGenerateUserVal(arena, gUser)
-	log.Println("generated val", new_val.String())
+	arena = pool.Get()
+
+	gUser := &User{ID: "test_value", Tags: []string{"1", "3", "2"}}
+	new_val := MakeReflectUserVal(arena, gUser)
+	log.Println("reflect build val", new_val.String())
 
 	// Don't forget reset arena after String()
 	arena.Reset()

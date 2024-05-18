@@ -18,11 +18,13 @@ type Contacts struct {
 	Emails []string
 }
 
+//go:generate fastjson_builder -type=GenerateUser
 type User struct {
 	ID          string      `json:"id"`
 	Credentials *Credential `json:"-"`
 	Profile     *Profile
 	Contacts    Contacts `json:"user_contacts"`
+	Tags        []string
 }
 
 func GetUserVal(arena *fastjson.Arena, user *User) *fastjson.Value {

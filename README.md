@@ -16,3 +16,14 @@ I am programmer and i am lazy :)
 
 ```go
 ```
+
+## Benchmarks
+
+```
+goos: darwin
+goarch: arm64
+pkg: github.com/sshaplygin/fastjson-builder/cmd
+BenchmarkStd-10                       5713700        201.1 ns/op       96 B/op        1 allocs/op
+BenchmarkManualFastJSONBuild-10       2095821        680.0 ns/op     3283 B/op        7 allocs/op
+BenchmarkReflectFastJSONBuild-10      1000000       1105 ns/op     3646 B/op       19 allocs/op
+```

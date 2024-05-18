@@ -74,9 +74,7 @@ func walk(arena *fastjson.Arena, rType reflect.Type, rValue reflect.Value) *fast
 				for i := 0; i < fieldValue.Len(); i++ {
 					arrValue := fieldValue.Index(i)
 
-					// var val *fastjson.Value
 					switch arrValue.Kind() {
-					// todo: support all type
 					case reflect.String:
 						val = arena.NewString(arrValue.String())
 					case reflect.Bool:

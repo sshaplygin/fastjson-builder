@@ -33,7 +33,6 @@ func GetUserVal(arena *fastjson.Arena, user *User) *fastjson.Value {
 	}
 
 	obj := arena.NewObject()
-	// arena.Reset()
 	obj.Set("id", arena.NewString(user.ID))
 
 	profileObj := arena.NewNull()
@@ -46,18 +45,28 @@ func GetUserVal(arena *fastjson.Arena, user *User) *fastjson.Value {
 	obj.Set("Profile", profileObj)
 
 	contactsObj := arena.NewObject()
-	emailArray := arena.NewArray()
+	emailArray := arena.NewNull()
 
-	for i, email := range user.Contacts.Emails {
-		emailArray.SetArrayItem(i, arena.NewString(email))
-	}
-
-	if len(user.Contacts.Emails) == 0 {
-		emailArray = arena.NewNull()
+	if len(user.Contacts.Emails) > 0 {
+		emailArray = arena.NewArray()
+		for i := 0; i < len(user.Contacts.Emails); i++ {
+			emailArray.SetArrayItem(i, arena.NewString(user.Contacts.Emails[i]))
+		}
 	}
 
 	contactsObj.Set("Emails", emailArray)
 	obj.Set("user_contacts", contactsObj)
+
+	tagsArray := arena.NewNull()
+	if len(user.Tags) > 0 {
+		tagsArray = arena.NewArray()
+
+		for i := 0; i < len(user.Tags); i++ {
+			tagsArray.SetArrayItem(i, arena.NewString(user.Tags[i]))
+		}
+	}
+
+	obj.Set("Tags", tagsArray)
 
 	return obj
 }

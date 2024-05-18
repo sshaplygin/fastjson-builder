@@ -28,8 +28,7 @@ func main() {
 
 	arena = pool.Get()
 
-	gUser := &User{ID: "test_value", Tags: []string{"1", "3", "2"}}
-	new_val := MakeReflectUserVal(arena, gUser)
+	new_val := GetReflectUserVal(arena, user)
 	log.Println("reflect build val", new_val.String())
 
 	// Don't forget reset arena after String()

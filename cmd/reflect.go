@@ -12,27 +12,31 @@ const (
 	skipField   = "-"
 )
 
-func MakeReflectUserVal(arena *fastjson.Arena, data interface{}) *fastjson.Value {
+func GetReflectUserVal(arena *fastjson.Arena, data interface{}) *fastjson.Value {
 	if data == nil {
 		return arena.NewNull()
 	}
 
 	rValue := reflect.ValueOf(data)
-	if rValue.Kind() != reflect.Array && rValue.Kind() != reflect.Pointer &&
-		rValue.Kind() != reflect.Slice && rValue.Kind() != reflect.Struct &&
-		// todo: add support map
+	if rValue.Kind() != reflect.Array && rValue.Kind() != reflect.Slice &&
+		rValue.Kind() != reflect.Pointer && rValue.Kind() != reflect.Struct &&
 		rValue.Kind() != reflect.Map {
-		panic("invalid input value")
+		panic("invalid input data type")
 	}
 
 	rType := reflect.TypeOf(data)
-	if rValue.Kind() == reflect.Pointer {
+	if rType.Kind() == reflect.Pointer {
 		rValue = rValue.Elem()
 		rType = rValue.Type()
 	}
 
 	if rType.Kind() == reflect.Struct {
 		return walk(arena, rType, rValue)
+	}
+
+	if rValue.Kind() != reflect.Array && rValue.Kind() != reflect.Slice &&
+		rValue.Kind() != reflect.Map {
+		panic("not supported data type")
 	}
 
 	return arena.NewNull()
